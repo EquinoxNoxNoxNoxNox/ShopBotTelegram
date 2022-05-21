@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopBot | اضافه کردن محصول جدید</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/script.js"></script>
+</head>
+<body>
+    {{!base}}
+    <div id="AllLoading">
+        <span>لطفا کمی صبر کنید</span>
+    </div>
+    <div id="AllToast"></div>
+    <div id="AllLightBox">
+        <div class="ContentContainer">
+            <div id="LightBoxContentContainer">
+                
+            </div>
+            <div id="divBtnContainer">
+                <div class="btn btnGreen" id="btnLigthBoxAccept">
+                    ثبت
+                </div>
+                <div class="btn btnRed" id="btnLightBoxCancel">
+                    لغو
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    $(document).ready(function(){
+        $("#AllLoading").hide()
+    })
+</script>
+</html>

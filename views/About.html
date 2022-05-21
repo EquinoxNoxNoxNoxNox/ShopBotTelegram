@@ -1,0 +1,54 @@
+%rebase ('_layout')
+<div class="ContentContainer">
+    <span>
+        متن درباره ی ما:
+    </span>
+    <textarea name="AboutText" id="txtAbout">
+        {{!AboutText}}
+    </textarea>
+    <div target="about" class="btn btnGreen">ثبت متن درباره ی ما</div>
+    <br>
+    <span>
+        متن سوالات متداول
+    </span>
+    <textarea name="FAQText" id="txtFAQ">
+        {{!FAQText}}
+    </textarea>
+    <div target="FAQ" class="btn btnGreen">ثبت متن سوالات متداول</div>
+    <br>
+    <span>
+        متن تاریخچه ی ماشروم
+    </span>
+    <textarea name="HistoryText" id="txtHistory">
+        {{!HistoryText}}
+    </textarea>
+    <div target="history" class="btn btnGreen">ثبت متن تاریخچه</div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $(".btn").click(function(){
+            let Target = $(this).attr("target")
+            let Text = ""
+            switch (Target){
+                case "about":
+                    Text=$("#txtAbout").val()
+                    break
+                case "FAQ":
+                    Text = $("#txtFAQ").val()
+                    break
+                case "history":
+                    Text = $("#txtHistory").val()
+                    break
+            }
+            CallMethod("/setabo", JSON.stringify({"Target" : Target,"Text" : Text}), function (res) {
+                ShowToast("با موفقیت انجام شد")
+            },()=>{},true)
+        })
+    })
+</script>
+<style>
+    span{
+        font-size: 25px;
+    }
+</style>

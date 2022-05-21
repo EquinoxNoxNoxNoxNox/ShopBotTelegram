@@ -1,0 +1,177 @@
+%rebase ('_layout')
+<div class="ContentContainer">
+    %if ProductId:
+        <div class="btn btnRed" id="btnDelete">
+            حذف محصول
+        </div>
+    %end
+    %if Product.IsDeleted:
+        <div class="btn btnRed" id="btnDelete">
+            بازگرداندن محصول
+        </div>
+    %end
+    <input class="TextInput" type="text" name="Title" id="TextTitle" placeholder="نام محصول">
+    <textarea name="Description" placeholder="توضیحات" id="TextDescription"></textarea>
+    <input class="TextInput" type="text" id="NumbPrice" placeholder="قیمت" name="Price" numb>
+    
+    <select class="TextInput" name="CategoryId" id="slcCategoryId">
+        <option value="0">دسته بندی</option>
+    </select>
+    %if ProductId:
+        <div class="btn btnGreen" id="btnGetPhotos" onclick="GetPhotos()">
+             دریافت تصاویر موجود
+        </div>
+    %end
+    <label for="pph">آپلود تصویر</label>
+    <input type="file" name="pph" class="btn btnGreen" placeholder="آپلود تصویر" id="fileProductPhoto">
+    <div id="divContainerImageFileInput">
+        
+    </div>
+    %if ProductId:
+        <div class="btn btnGreen" style="margin-top:20px;" onclick="SubmitProduct()">ثبت تغیرات</div>
+    %else:
+        <div class="btn btnGreen" style="margin-top:20px;" onclick="SubmitProduct()">ثبت محصول</div>
+    %end
+</div>
+
+<div id="divPhotoOpen">
+</div>
+
+<style>
+    #btnDelete{
+        position: absolute;
+        right:2%;
+        top:2%;
+    }
+
+    #divPhotoOpen{
+        display: none;
+    }
+    #divPhotoOpen > img{
+        max-width:100%;
+        max-height: 100%;
+    }</style>
+
+<script>
+    let Categories = {{!Categories}}
+    let Product = {{!Product}}
+    let ProductPhotos = []
+    let _imgcounter = 0
+    $(document).ready(function(){
+        Categories.forEach(element => {
+            $("#slcCategoryId").append("<option value="+element.Id+">"+element.Title+"</option>");
+        });
+        $("#btnDelete").click(function(){
+            CallMethod("/pr", JSON.stringify({Id:Product.Id}), function (res) {
+                ShowToast("محصول حذف شد")
+                window.location.replace("/pr")
+            },()=>{},true)
+        })
+        for(let key of Object.keys(Product))
+            if(Product[key] == "" | !Product[key])
+                Product[key] = null
+        $("#TextTitle").val(Product["Title"]);
+        $("#TextDescription").val(Product["Description"]);
+        $("#NumbPrice").val(Product["Price"]);
+        $("#slcCategoryId").val(Product["CategoryId"]);
+                       
+        $('#fileProductPhoto').change(function () {
+            var ImageBase64Str = "", reader = new FileReader(), ImageFile;
+            ImageFile = $(this).get(0).files[0];
+            if(($(this).get(0).files[0].size/1024) > 700){
+                ShowToast("سایز فایل بیششتر از 700کیلوبایت میباشید")
+                return $(this).val(null)
+            }
+            reader.readAsDataURL(ImageFile);
+            _imgcounter += 1;
+            reader.onload = function (e) {
+                let container = $('<div class="ImageFile" photoTagId="'+_imgcounter+'">');
+                $(container).on(
+                    "click",function(e){
+                        $(".ImageFile").removeClass("Main");
+                        $(this).addClass("Main");
+                        $("#divPhotoOpen").html($(this).find("img"));
+                    })
+                $(container).append('<img src="'+e.target.result+'" alt="">');
+                $(container).append($('<div>').on("click",function(){
+                    let IdToRemove = parseInt($(this).parent().attr("photoTagId"));
+                    for(let i of ProductPhotos)
+                        if(i['cnt'] == IdToRemove)
+                            delete ProductPhotos[ProductPhotos.indexOf(i)];
+                    $(this).parent().remove()
+                }))
+                $("#divContainerImageFileInput").append(container);
+            }
+            $("#AllLoading").fadeIn(200);
+            setTimeout(() => {
+                ImageBase64Str = reader.result.split(";base64,").pop();
+                param = {"Picture": ImageBase64Str}
+                CallMethod("/ppu", JSON.stringify(param), function (res) {
+                    $(this).val(null);
+                    ProductPhotos.push({"FileId":res,"cnt":_imgcounter})
+                    ShowToast("عکس محصول با موفقیت بروز رسانی شد");
+                },()=>{}, true);
+            }, 200)
+        });
+    })
+    
+    function ValidateVals(valId){
+        var _ = $(valId).val()
+        if(_ && _ !="0")
+            return convertFaNumber(_);
+        else{
+            $(valId).addClass("Error");
+            ShowToast(($(valId).attr("placeholder") | $(valId).find("option:first-child").html()) + " را پر کنید ");
+            throw Error("app stoped");
+        }
+    }
+
+    function SubmitProduct(){
+        param = {
+            Id : {{!ProductId}},
+            Title : ValidateVals("#TextTitle"),
+            Description : ValidateVals("#TextDescription"),
+            Price : ValidateVals("#NumbPrice"),
+            CategoryId : ValidateVals("#slcCategoryId"),
+            Photos : []
+        }
+        for(let photo of ProductPhotos)
+            if(photo)
+                param["Photos"].push({
+                    "FileId":photo["FileId"]
+                });
+        CallMethod("/ap", JSON.stringify(param), (res)=>{
+            ShowToast("محصول با موفقیت به سیستم اضافه شد");
+            window.location.replace('/');
+        }, ()=>{console.log("nothing happened")}, true);
+    }
+    
+    function GetPhotos(){
+        CallMethod("/gil", JSON.stringify({"ProductId" : Product["Id"]}), function (res) {
+            ProductImageLength = res
+            ShowToast("GIL acquired")
+            $(res).each(function(i,e){
+                let DOMContainer = $('<div class="ImageFile" photoTagId="'+ e["Id"] +'">');
+                $(DOMContainer).append('<img src="/img/'+e["Name"]+'" alt="">');
+                $(DOMContainer).append($('<div>').on("click",function(){
+                    if(confirm("آیا از  حذف تصویر مطمئن هستید") == true){
+                        let IdToRemove = parseInt($(this).parent().attr("photoTagId"));
+                        CallMethod("/gr", JSON.stringify({PhotoId : IdToRemove}), function (res){
+                            DOMContainer.remove()
+                            ShowToast("تصویر حذف شد")
+                        },()=>{
+                            throw Error("EEEEErrr");
+                        },true)
+                    }
+                    else
+                        return;
+                }));
+                $("#divContainerImageFileInput").append(DOMContainer)
+                $("#btnGetPhotos").hide()
+            })
+            
+            
+        },()=>{},true)
+        
+    }
+</script>

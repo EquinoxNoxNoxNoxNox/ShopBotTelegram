@@ -1,0 +1,122 @@
+%rebase ('_layout')
+<div class="ContentContainer">
+    <table class="ContentTable" id="tblProducts">
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                عنوان
+            </th>
+            <th>
+                قیمت
+            </th>
+            <th>
+                دسته بندی
+            </th>
+            <th>
+                تعداد بازدید
+            </th>
+            <th>
+                <!-- IsDeleted -->
+                وضعیت 
+            </th>
+            <th>
+                تاریخ ثبت
+            </th>
+            <th>
+                عملیات
+            </th>
+        </tr>
+        
+    </table>
+</div>
+
+<script>
+    var Products = {{!Products}}
+    $(document).ready(function(){
+        for(let vals of Products){
+            $("#tblProducts").append('<tr><td thdata="Id">'+vals["Id"]+'</td><td thdata="عنوان">'
+                +vals["Title"]+'</td><td thdata = "قیمت">'
+                +vals["Price"]+'</td><td thdata = "دسته بندی">'
+                +vals['CategoryId']+'</td><td thdata="تعداد بازدید">'
+                +vals['Views']+'</td><td thdata = "وضعیت">'
+                +(!vals['IsDeleted'] ? "<span style='color:green'>فعال</span>" : "<span style='color:red'>حذف شده</span>")+'</td><td thdata = "تاریخ ثبت">'
+                +vals['Date']+'</td><td><a style="color:blue" href="/add/'
+                + vals["Id"] +'">OPEN PRODUCT</a></td></tr>')
+        }
+    })
+    
+    
+</script>
+<style>
+    .ContentTable{
+    min-width:100%;
+    text-align: center;
+    border-collapse:collapse;
+    color:#3a3a3a;
+    cursor: default;
+    font-size: 1.1rem;
+    color: #000;
+
+}
+
+    .ContentTable tr{
+        box-sizing: border-box;
+    }
+    
+        .ContentTable tr:nth-child(1){
+            background:#359d9e;
+            color:#fff;
+            font-style: normal;
+            font-size: 16px;
+        }
+
+        .ContentTable tr:not(:last-child){
+            border-bottom:solid 1px #f0f0f0;
+        }
+
+    .ContentTable th{
+        padding:20px 5px;
+    }
+
+    .ContentTable td{
+        padding:10px 5px;
+    }
+
+.ContentTableResponsive{
+    display: block;
+}
+
+    .ContentTableResponsive th{
+        display: none;
+    }
+
+    .ContentTableResponsive tr{
+        display: table;
+        width: 100%;
+        border-bottom: solid 1px #aed6d7 !important;
+    }
+
+    .ContentTableResponsive tr td{
+        width: 50%;
+        position: relative;
+        display: table-row;
+    }
+
+    .ContentTableResponsive tr td::after{
+        content: attr(thdata);
+        display: block;
+        width: calc(50% - 5px);
+        float: left;
+        padding-bottom:10px;
+        text-align: left;
+        padding-left: 5px;
+        font-weight: bold;
+    }
+
+    .ContentTableResponsive tr:nth-child(2n) td::after{
+        background:#359d9e;
+        color:#fff;
+    }
+</style>

@@ -5,3 +5,5 @@ in this project i'm using<ul><li>Pyrogram</li><li>Tinydb for storage</li><li>jda
 You can change buttons or texts of the robot in <i>plugins\confing.py</i>.
 
 You have to set the owner of robot in <i>plugins\Modules\B_admin.py : set the variable to owner's telegram user_id </i>
+
+to get things started : <code>python3 main.py</code>

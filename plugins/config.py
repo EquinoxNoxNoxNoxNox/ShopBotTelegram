@@ -1,24 +1,18 @@
 import jdatetime
-URL_ChannelLink = "https://t.me/Magicmushroom_iran"
-Project_Title = "SilkRoad"
-BotUsername = "@KingShamanbot"
-caption = "SilkRoad smartshop!⭐️⭐️⭐️⭐️⭐️🌿🍄\nربات فروشگاه silkroad معتبر ترین در ایران\nچطور میتونم کمکتون کنم؟\n"+BotUsername
+URL_ChannelLink = "[OWNER CHANNEL LINK]"
+Project_Title = "[BOT TITLTE]"
+BotUsername = "@[BOTUSERNAME]"
+caption = ""+BotUsername
 ListOffset = 15
 
-SellerUsername = "@silkroadadmin1"
+SellerUsername = "[SELLERS USERNAME CONCAT with /\n]"
 
-Text_Signature = "{Text}\n\n\nفروشگاه تلگرامی SilkRoad \nکامل ترین و بهترین مرجع فروش پلیت و اسپان مجیک ماشروم\nوید و ال اس دی \nدی ام تی و آمفتامین."+BotUsername #+ "\n@" + URL_ChannelLink.split("/")[-1]
+Text_Signature = "{Text}"+BotUsername #+ "\n@" + URL_ChannelLink.split("/")[-1]
 
 Button_Shop = "سفارش محصول🛒"
 Text_userStart = u"Welcome to ["+ Project_Title +"]("+ f'http://t.me/{BotUsername}?start)\n' + caption
 Text_userShowitems = u"دسته بندی محصولات\nبرای بازدید از موجودی روی دسته بندی مورد نظر کلیلک کنید"
 Button_Back = u"بازگشت🔙"
-
-IconAlien = "https://cdn4.vectorstock.com/i/1000x1000/83/53/alien-hugging-cat-cat-is-my-best-friend-cartoon-vector-34188353.jpg"
-PhotoAlien = "https://mpng.subpng.com/20180415/fuw/kisspng-alien-drawing-artist-extraterrestrial-life-alien-5ad349c9179153.9936031615237964250965.jpg"
-
-IconWizard = "https://64.media.tumblr.com/f754115e758b00040d95f34a14b15308/fbc3581c89c3ce9c-54/s500x750/a33d7248d7e298c0b9b3e6ed513b32cf05aa8fb3.png"
-PhotoWizard = "https://pbs.twimg.com/media/E05LPyLXsAMt1YC.png"
 
 TextMushroomArt = {"GoldenTeacher":
 "```     _.._"+
@@ -122,7 +116,7 @@ Keyboard_OperatorSupreme = u"p3 📊آمار و پنل😼"
 Keyboard_OperatorStart = "/start 👁‍🗨بازدید از ربات🧙"
 
 Button_AboutFAQ="سوالات متداول"
-Button_AboutAStory = "تاریخچه ماشروم"
+Button_AboutAStory = "[DESCRIPTION OF YOUR HISTORY]"
 
 Button_SupremeAdmins = u"👽ادمین ها👽"
 Button_SupremeUsers = u"🧙کاربر ها🧙"
@@ -163,7 +157,7 @@ Text_AdminNewMessage = "#TALKIE\n{date}\nFrom : [This guy](tg://user?id={uid})\n
 
 Text_AdminNoMessage = u"چیزی در صندوق وجود ندارد ، چند دقیقه دیگه دکمه تلاش مجدد رو بزن 📫🦴"
 Text_AdminTalkieConnect = "#TALKIE🤙[This guy](tg://user?id={uid})\nUser Id:то{userId}то\nروی این پیام reply کنید تا پیام شما دست کاربر برسد"
-Text_FileInvalid = u"این مدل فایل فرستاده نمیشود ، چون حاجیم اینجوری درستم کرده🦴"
+Text_FileInvalid = u"این مدل فایل فرستاده نمیشود🦴"
 #Button_Supreme3iixz = u""
 
 Link_invite = lambda x:f"`http://t.me/{BotUsername}?start={x}`"
